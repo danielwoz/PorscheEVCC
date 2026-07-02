@@ -27,7 +27,7 @@ products:
       generic: Wattpilot (OCPP)
 capabilities: ["rfid", "1p3p", "dim"]
 requirements:
-  evcc: ["sponsorship", "skiptest"]
+  evcc: ["skiptest"]
 params:
   - preset: ocpp
 render: |

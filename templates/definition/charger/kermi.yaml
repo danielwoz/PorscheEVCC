@@ -8,8 +8,6 @@ products:
       generic: x-center pro
 capabilities: ["meter", "dim"]
 group: heating
-# requirements:
-#   evcc: ["sponsorship"]
 params:
   - name: host
   - name: tempsource

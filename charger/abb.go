@@ -26,7 +26,6 @@ import (
 	"github.com/evcc-io/evcc/api"
 	"github.com/evcc-io/evcc/util"
 	"github.com/evcc-io/evcc/util/modbus"
-	"github.com/evcc-io/evcc/util/sponsor"
 )
 
 // ABB charger implementation
@@ -74,10 +73,6 @@ func NewABB(ctx context.Context, uri, device, comset string, baudrate int, proto
 	conn, err := modbus.NewConnection(ctx, uri, device, comset, baudrate, proto, slaveID)
 	if err != nil {
 		return nil, err
-	}
-
-	if !sponsor.IsAuthorized() {
-		return nil, api.ErrSponsorRequired
 	}
 
 	log := util.NewLogger("abb")

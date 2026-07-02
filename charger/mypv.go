@@ -29,7 +29,6 @@ import (
 	"github.com/evcc-io/evcc/core/loadpoint"
 	"github.com/evcc-io/evcc/util"
 	"github.com/evcc-io/evcc/util/modbus"
-	"github.com/evcc-io/evcc/util/sponsor"
 )
 
 // MyPv charger implementation
@@ -105,10 +104,6 @@ func NewMyPv(ctx context.Context, name, uri string, slaveID uint8, tempSource in
 	conn, err := modbus.NewConnection(ctx, uri, "", "", 0, modbus.Tcp, slaveID)
 	if err != nil {
 		return nil, err
-	}
-
-	if !sponsor.IsAuthorized() {
-		return nil, api.ErrSponsorRequired
 	}
 
 	if tempSource < 1 || tempSource > len(elwaTemp) {

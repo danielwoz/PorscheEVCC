@@ -11,7 +11,6 @@ products:
 capabilities: ["meter", "dim"]
 group: heating
 requirements:
-  # evcc: ["sponsorship"]
   description:
     de: |
       Energiemanagementeinstellungen am Gerät:

@@ -3,8 +3,8 @@ version: 2
 dist: release
 release:
   github:
-    owner: evcc-io
-    name: evcc
+    owner: danielwoz
+    name: PorscheEVCC
   mode: replace
 
 builds:
@@ -116,23 +116,3 @@ nfpms:
       postinstall: ./packaging/scripts/postinstall.sh
       preremove: ./packaging/scripts/preremove.sh
       postremove: ./packaging/scripts/postremove.sh
-
-brews:
-  - repository:
-      owner: evcc-io
-      name: homebrew-tap
-    commit_author:
-      name: andig
-      email: info@evcc.io
-    directory: Formula
-    homepage: "https://evcc.io"
-    description: "Sonne tanken ☀️🚘"
-    license: "MIT"
-    test: |
-      system "#{bin}/evcc --version"
-    service: |
-      run [opt_bin/"evcc"]
-      working_dir HOMEBREW_PREFIX
-      keep_alive true
-      log_path var/"log/evcc.log"
-      error_log_path var/"log/evcc.log"

@@ -29,7 +29,6 @@ import (
 	"github.com/evcc-io/evcc/api/implement"
 	"github.com/evcc-io/evcc/util"
 	"github.com/evcc-io/evcc/util/request"
-	"github.com/evcc-io/evcc/util/sponsor"
 	"github.com/evcc-io/evcc/vehicle/tronity"
 	"golang.org/x/oauth2"
 )
@@ -67,10 +66,6 @@ func NewTronityFromConfig(other map[string]any) (api.Vehicle, error) {
 
 	if err := cc.Credentials.Error(); err != nil {
 		return nil, err
-	}
-
-	if !sponsor.IsAuthorized() {
-		return nil, api.ErrSponsorRequired
 	}
 
 	// authenticated http client with logging injected to the tronity client

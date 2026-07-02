@@ -26,7 +26,6 @@ import (
 	"github.com/evcc-io/evcc/api"
 	"github.com/evcc-io/evcc/util"
 	"github.com/evcc-io/evcc/util/modbus"
-	"github.com/evcc-io/evcc/util/sponsor"
 )
 
 // https://shop.alphatec-systeme.de/media/pdf/4d/0e/64/MontageanleitungwlFxbRgs4NKK3.pdf
@@ -67,10 +66,6 @@ func NewAlphatec(ctx context.Context, uri, device, comset string, baudrate int, 
 	}
 
 	conn.Delay(20 * time.Millisecond)
-
-	if !sponsor.IsAuthorized() {
-		return nil, api.ErrSponsorRequired
-	}
 
 	log := util.NewLogger("alphatec")
 	conn.Logger(log.TRACE)

@@ -11,7 +11,7 @@ products:
       generic: Station
 capabilities: ["dim"]
 requirements:
-  evcc: ["sponsorship", "skiptest"]
+  evcc: ["skiptest"]
 params:
   - preset: ocpp
 render: |

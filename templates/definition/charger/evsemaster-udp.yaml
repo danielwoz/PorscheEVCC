@@ -1,7 +1,7 @@
 template: evsemaster-udp
 capabilities: ["meter", "dim"]
 requirements:
-  evcc: ["sponsorship", "skiptest"]
+  evcc: ["skiptest"]
   description:
     de: >
       Die Ladestation und evcc müssen sich im selben Netzwerksegment (VLAN) befinden,

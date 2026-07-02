@@ -26,7 +26,6 @@ import (
 	"github.com/evcc-io/evcc/api"
 	"github.com/evcc-io/evcc/util"
 	"github.com/evcc-io/evcc/util/modbus"
-	"github.com/evcc-io/evcc/util/sponsor"
 )
 
 // HeidelbergEC charger implementation
@@ -78,10 +77,6 @@ func NewHeidelbergEC(ctx context.Context, uri, device, comset string, baudrate i
 	conn, err := modbus.NewConnection(ctx, uri, device, comset, baudrate, proto, slaveID)
 	if err != nil {
 		return nil, err
-	}
-
-	if !sponsor.IsAuthorized() {
-		return nil, api.ErrSponsorRequired
 	}
 
 	log := util.NewLogger("heidel")

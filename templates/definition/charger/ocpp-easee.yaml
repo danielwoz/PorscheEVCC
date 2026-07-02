@@ -39,7 +39,7 @@ requirements:
       * Protocol: OCPP-J v1.6, Websocket, ws://
       * Local network connection
       * Minimum meter interval: 30s
-  evcc: ["sponsorship", "skiptest"]
+  evcc: ["skiptest"]
 params:
   - preset: ocpp
   - name: metervalues

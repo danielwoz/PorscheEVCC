@@ -15,7 +15,6 @@ requirements:
   description:
     de: "Eingebunden via [emsesp.org](https://emsesp.org/)"
     en: "Integrated via [emsesp.org](https://emsesp.org/)"
-#   evcc: ["sponsorship"]
 params:
   - name: host
   - name: token
