@@ -1,23 +1,31 @@
 <template>
-	<div v-if="showSplit" class="cards cards--split gap-3">
-		<BatteryStatusCard v-bind="cards[0]" />
-		<Card :title="$t('battery.optimizer.title')" data-testid="battery-optimizer-card">
-			<OptimizerInfo :suggestion="suggestion" :forecast="batteryForecast" />
+	<div v-if="showSplit" class="cards cards--split gap-4">
+		<BatteryStatusCard v-bind="cards[0]" :battery-mode="batteryMode" />
+		<Card data-testid="battery-optimizer-card">
+			<OptimizerInfo
+				:suggestion="devices[0]?.suggestion ?? null"
+				:forecast="batteryForecast"
+			/>
 		</Card>
 	</div>
-	<div v-else class="cards gap-3">
-		<BatteryStatusCard v-for="card in cards" :key="card.id" v-bind="card" />
+	<div v-else class="cards gap-4">
+		<BatteryStatusCard
+			v-for="card in cards"
+			:key="card.id"
+			v-bind="card"
+			:battery-mode="batteryMode"
+		/>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, type PropType } from "vue";
 import { batteryColor } from "@/colors";
-import type { Battery, BatteryForecast, BatteryMeter } from "@/types/evcc";
+import type { BATTERY_MODE, Battery, BatteryForecast, BatteryMeter } from "@/types/evcc";
 import Card from "../Helper/Card.vue";
 import BatteryStatusCard from "./BatteryStatusCard.vue";
 import OptimizerInfo from "./OptimizerInfo.vue";
-import type { BatterySuggestion, BatteryStatusCardModel } from "./types";
+import type { BatteryStatusCardModel } from "./types";
 
 // One battery + forecast splits into battery and optimizer cards; several batteries prepend a
 // combined aggregate. Stateless, derived from the battery object.
@@ -26,7 +34,7 @@ export default defineComponent({
 	components: { Card, BatteryStatusCard, OptimizerInfo },
 	props: {
 		battery: { type: Object as PropType<Battery> },
-		suggestion: { type: Object as PropType<BatterySuggestion | null>, default: null },
+		batteryMode: String as PropType<BATTERY_MODE>,
 	},
 	computed: {
 		devices(): BatteryMeter[] {
@@ -37,7 +45,9 @@ export default defineComponent({
 			return fc?.highest || fc?.lowest ? fc : null;
 		},
 		showSplit(): boolean {
-			return this.devices.length === 1 && !!this.batteryForecast;
+			return (
+				this.devices.length === 1 && !!(this.batteryForecast || this.devices[0]?.suggestion)
+			);
 		},
 		cards(): BatteryStatusCardModel[] {
 			const multiple = this.devices.length > 1;
@@ -48,10 +58,13 @@ export default defineComponent({
 				power: d.power,
 				capacity: d.capacity || 0,
 				color: batteryColor(i),
-				suggestion: null, // per-battery suggestion not wired yet
+				controllable: d.controllable,
+				// single battery shows the suggestion on the dedicated optimizer card
+				suggestion: multiple ? (d.suggestion ?? null) : null,
 				forecast: null, // aggregate forecast lives on the combined / dedicated card
 			}));
-			// combined uses the site aggregate soc/power, not per-device sums
+			// combined uses the site aggregate soc/power, not per-device sums; the site-wide
+			// battery mode always applies here regardless of per-device controllability
 			if (multiple) {
 				list.unshift({
 					id: "combined",
@@ -60,7 +73,8 @@ export default defineComponent({
 					power: this.battery?.power ?? 0,
 					capacity: this.devices.reduce((s, d) => s + (d.capacity || 0), 0),
 					color: batteryColor(0),
-					suggestion: this.suggestion,
+					controllable: true,
+					suggestion: null, // no aggregate; device cards show their own
 					forecast: this.batteryForecast,
 				});
 			}
@@ -73,7 +87,7 @@ export default defineComponent({
 <style scoped>
 .cards {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
 }
 .cards--split {
 	grid-template-columns: 1fr 1fr;
