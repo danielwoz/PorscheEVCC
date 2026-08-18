@@ -28,6 +28,7 @@ import (
 	"github.com/evcc-io/evcc/api"
 	"github.com/evcc-io/evcc/api/implement"
 	"github.com/evcc-io/evcc/util"
+	"github.com/evcc-io/evcc/util/oauth"
 	"github.com/evcc-io/evcc/util/request"
 	"github.com/evcc-io/evcc/vehicle/tronity"
 	"golang.org/x/oauth2"
@@ -52,8 +53,8 @@ func init() {
 func NewTronityFromConfig(other map[string]any) (api.Vehicle, error) {
 	cc := struct {
 		embed       `mapstructure:",squash"`
-		Credentials ClientCredentials
-		Tokens      Tokens
+		Credentials oauth.ClientCredentials
+		Tokens      oauth.Tokens
 		VIN         string
 		Cache       time.Duration
 	}{

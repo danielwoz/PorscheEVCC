@@ -6,6 +6,7 @@ import (
 
 	"github.com/evcc-io/evcc/api"
 	"github.com/evcc-io/evcc/util"
+	"github.com/evcc-io/evcc/util/oauth"
 	"github.com/evcc-io/evcc/vehicle/porsche"
 	"golang.org/x/oauth2"
 )
@@ -23,10 +24,10 @@ func init() {
 }
 
 // NewPorscheFromConfig creates a new vehicle
-func NewPorscheFromConfig(ctx context.Context, other map[string]any) (api.Vehicle, error) {
+func NewPorscheFromConfig(_ context.Context, other map[string]any) (api.Vehicle, error) {
 	cc := struct {
 		embed  `mapstructure:",squash"`
-		Tokens Tokens
+		Tokens oauth.Tokens
 		VIN    string
 		Cache  time.Duration
 	}{
@@ -48,7 +49,7 @@ func NewPorscheFromConfig(ctx context.Context, other map[string]any) (api.Vehicl
 		seed = token
 	}
 
-	identity, err := porsche.NewIdentity(ctx, log, seed)
+	identity, err := porsche.NewIdentity(log, seed)
 	if err != nil {
 		return nil, err
 	}
